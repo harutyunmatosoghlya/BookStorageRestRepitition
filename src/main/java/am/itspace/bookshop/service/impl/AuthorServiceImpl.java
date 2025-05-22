@@ -6,6 +6,7 @@ import am.itspace.bookshop.entity.Author;
 import am.itspace.bookshop.mapper.AuthorMapper;
 import am.itspace.bookshop.repository.AuthorRepository;
 import am.itspace.bookshop.service.AuthorService;
+import am.itspace.bookshop.util.ValueUpdateUtil;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ import java.util.Optional;
 public class AuthorServiceImpl implements AuthorService {
     private final AuthorRepository authorRepository;
     private final AuthorMapper authorMapper;
+    private final ValueUpdateUtil valueUpdateUtil;
 
     @Override
     public List<AuthorResponseDto> getAll() {
@@ -62,17 +64,11 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     private Author updateAuthorFields(Author author, SaveAuthorRequest saveAuthorRequest) {
-        author.setName(getOrDefault(saveAuthorRequest.getName(), author.getName()));
-        author.setSurname(getOrDefault(saveAuthorRequest.getSurname(), author.getSurname()));
-        author.setPhone(getOrDefault(saveAuthorRequest.getPhone(), author.getPhone()));
-        author.setDateOfBirthday(getOrDefault(saveAuthorRequest.getDateOfBirthday(), author.getDateOfBirthday()));
-        author.setGender(getOrDefault(saveAuthorRequest.getGender(), author.getGender()));
+        author.setName(valueUpdateUtil.getOrDefault(saveAuthorRequest.getName(), author.getName()));
+        author.setSurname(valueUpdateUtil.getOrDefault(saveAuthorRequest.getSurname(), author.getSurname()));
+        author.setPhone(valueUpdateUtil.getOrDefault(saveAuthorRequest.getPhone(), author.getPhone()));
+        author.setDateOfBirthday(valueUpdateUtil.getOrDefault(saveAuthorRequest.getDateOfBirthday(), author.getDateOfBirthday()));
+        author.setGender(valueUpdateUtil.getOrDefault(saveAuthorRequest.getGender(), author.getGender()));
         return author;
-    }
-
-    private <T> T getOrDefault(T current, T incoming) {
-        if (incoming == null) return current;
-        if (incoming instanceof String && ((String) incoming).trim().isEmpty()) return current;
-        return incoming;
     }
 }

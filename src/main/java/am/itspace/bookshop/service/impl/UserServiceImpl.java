@@ -9,6 +9,7 @@ import am.itspace.bookshop.mapper.UserMapper;
 import am.itspace.bookshop.repository.UserRepository;
 import am.itspace.bookshop.service.UserService;
 import am.itspace.bookshop.util.JwtTokenUtil;
+import am.itspace.bookshop.util.ValueUpdateUtil;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenUtil jwtTokenUtil;
     private final UserMapper userMapper;
+    private final ValueUpdateUtil valueUpdateUtil;
 
     @Override
     public ResponseEntity<UserAuthResponse> login(UserAuthRequest userAuthRequest) {
@@ -79,17 +81,14 @@ public class UserServiceImpl implements UserService {
     }
 
     private User updateUserFields(User user, SaveUserRequest saveUserRequest) {
-        user.setName(getOrDefault(user.getName(), saveUserRequest.getName()));
-        user.setSurname(getOrDefault(user.getSurname(), saveUserRequest.getSurname()));
-        user.setEmail(getOrDefault(user.getEmail(), saveUserRequest.getEmail()));
-        user.setPassword(getOrDefault(user.getPassword(), passwordEncoder.encode(saveUserRequest.getPassword())));
-        user.setUserType(getOrDefault(user.getUserType(), saveUserRequest.getUserType()));
+        user.setName(valueUpdateUtil.getOrDefault(user.getName(), saveUserRequest.getName()));
+        user.setSurname(valueUpdateUtil.getOrDefault(user.getSurname(), saveUserRequest.getSurname()));
+        user.setEmail(valueUpdateUtil.getOrDefault(user.getEmail(), saveUserRequest.getEmail()));
+        user.setUserType(valueUpdateUtil.getOrDefault(user.getUserType(), saveUserRequest.getUserType()));
+        String rawPassword = saveUserRequest.getPassword();
+        if (rawPassword != null && !rawPassword.trim().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(rawPassword));
+        }
         return user;
-    }
-
-    private <T> T getOrDefault(T current, T incoming) {
-        if (incoming == null) return current;
-        if (incoming instanceof String && ((String) incoming).trim().isEmpty()) return current;
-        return incoming;
     }
 }

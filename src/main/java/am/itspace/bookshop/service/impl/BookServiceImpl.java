@@ -8,6 +8,7 @@ import am.itspace.bookshop.mapper.BookMapper;
 import am.itspace.bookshop.repository.AuthorRepository;
 import am.itspace.bookshop.repository.BookRepository;
 import am.itspace.bookshop.service.BookService;
+import am.itspace.bookshop.util.ValueUpdateUtil;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
     private final AuthorRepository authorRepository;
+    private final ValueUpdateUtil valueUpdateUtil;
 
     @Override
     public List<BookResponseDto> getAll() {
@@ -74,21 +76,14 @@ public class BookServiceImpl implements BookService {
     }
 
     private Book updateBookFields(Book book, SaveBookRequest saveBookRequest) {
-        book.setTitle(getOrDefault(book.getTitle(), saveBookRequest.getTitle()));
-        book.setPrice(getOrDefault(book.getPrice(), saveBookRequest.getPrice()));
-        book.setQty(getOrDefault(book.getQty(), saveBookRequest.getQty()));
+        book.setTitle(valueUpdateUtil.getOrDefault(book.getTitle(), saveBookRequest.getTitle()));
+        book.setPrice(valueUpdateUtil.getOrDefault(book.getPrice(), saveBookRequest.getPrice()));
+        book.setQty(valueUpdateUtil.getOrDefault(book.getQty(), saveBookRequest.getQty()));
         if (book.getAuthor() == null && authorRepository.findById(saveBookRequest.getAuthorId()).isPresent()) {
             Author author = authorRepository.findById(saveBookRequest.getAuthorId())
                     .orElseThrow(() -> new EntityNotFoundException("Author with id " + saveBookRequest.getAuthorId() + " not found"));
             book.setAuthor(author);
         }
         return book;
-    }
-
-
-    private <T> T getOrDefault(T current, T incoming) {
-        if (incoming == null) return current;
-        if (incoming instanceof String && ((String) incoming).trim().isEmpty()) return current;
-        return incoming;
     }
 }
