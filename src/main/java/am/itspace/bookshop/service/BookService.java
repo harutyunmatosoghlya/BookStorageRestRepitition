@@ -14,4 +14,8 @@ public interface BookService {
     ResponseEntity<BookResponseDto> save(SaveBookRequest saveBookRequest);
 
     List<BookResponseDto> getByAuthorId(int authorId);
+
+    ResponseEntity<BookResponseDto> update(SaveBookRequest saveBookRequest, int id);
+
+    void delete(int id);
 }

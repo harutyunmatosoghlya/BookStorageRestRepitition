@@ -3,11 +3,13 @@ package am.itspace.bookshop.service.impl;
 import am.itspace.bookshop.dto.SaveUserRequest;
 import am.itspace.bookshop.dto.UserAuthRequest;
 import am.itspace.bookshop.dto.UserAuthResponse;
+import am.itspace.bookshop.dto.UserUpdateResponse;
 import am.itspace.bookshop.entity.User;
 import am.itspace.bookshop.mapper.UserMapper;
 import am.itspace.bookshop.repository.UserRepository;
 import am.itspace.bookshop.service.UserService;
 import am.itspace.bookshop.util.JwtTokenUtil;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,5 +58,38 @@ public class UserServiceImpl implements UserService {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
         return userRepository.save(user);
+    }
+
+    @Override
+    public ResponseEntity<UserUpdateResponse> update(SaveUserRequest saveUserRequest, int id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            User updatedUser = updateUserFields(user.get(), saveUserRequest);
+            return new ResponseEntity<>(userMapper.toDto(userRepository.save(updatedUser)), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @Override
+    public void delete(int id) {
+        if (!userRepository.existsById(id)) {
+            throw new EntityNotFoundException("User with id " + id + " not found");
+        }
+        userRepository.deleteById(id);
+    }
+
+    private User updateUserFields(User user, SaveUserRequest saveUserRequest) {
+        user.setName(getOrDefault(user.getName(), saveUserRequest.getName()));
+        user.setSurname(getOrDefault(user.getSurname(), saveUserRequest.getSurname()));
+        user.setEmail(getOrDefault(user.getEmail(), saveUserRequest.getEmail()));
+        user.setPassword(getOrDefault(user.getPassword(), passwordEncoder.encode(saveUserRequest.getPassword())));
+        user.setUserType(getOrDefault(user.getUserType(), saveUserRequest.getUserType()));
+        return user;
+    }
+
+    private <T> T getOrDefault(T current, T incoming) {
+        if (incoming == null) return current;
+        if (incoming instanceof String && ((String) incoming).trim().isEmpty()) return current;
+        return incoming;
     }
 }

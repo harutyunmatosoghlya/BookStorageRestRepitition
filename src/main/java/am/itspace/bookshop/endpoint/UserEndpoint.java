@@ -3,15 +3,13 @@ package am.itspace.bookshop.endpoint;
 import am.itspace.bookshop.dto.SaveUserRequest;
 import am.itspace.bookshop.dto.UserAuthRequest;
 import am.itspace.bookshop.dto.UserAuthResponse;
+import am.itspace.bookshop.dto.UserUpdateResponse;
 import am.itspace.bookshop.entity.User;
 import am.itspace.bookshop.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
@@ -36,5 +34,21 @@ public class UserEndpoint {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(userService.save(saveUserRequest));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserUpdateResponse> update(@PathVariable int id, @RequestBody SaveUserRequest saveUserRequest) {
+        log.info("Update request: {}", saveUserRequest);
+        if (saveUserRequest == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return userService.update(saveUserRequest, id);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable int id) {
+        log.info("Delete request: {}", id);
+        userService.delete(id);
+        return ResponseEntity.ok().build();
     }
 }

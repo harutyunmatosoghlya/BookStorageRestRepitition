@@ -16,7 +16,6 @@ import java.util.Date;
 public class SaveAuthorRequest {
     private String name;
     private String surname;
-    private String email;
     private String phone;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateOfBirthday;

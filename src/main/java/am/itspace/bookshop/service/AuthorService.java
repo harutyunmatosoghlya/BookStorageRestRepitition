@@ -12,4 +12,8 @@ public interface AuthorService {
     AuthorResponseDto getById(int id);
 
     ResponseEntity<AuthorResponseDto> save(SaveAuthorRequest saveAuthorRequest);
+
+    ResponseEntity<AuthorResponseDto> update(SaveAuthorRequest saveAuthorRequest, int id);
+
+    void delete(int id);
 }

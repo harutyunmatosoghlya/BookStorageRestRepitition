@@ -3,6 +3,7 @@ package am.itspace.bookshop.service;
 import am.itspace.bookshop.dto.SaveUserRequest;
 import am.itspace.bookshop.dto.UserAuthRequest;
 import am.itspace.bookshop.dto.UserAuthResponse;
+import am.itspace.bookshop.dto.UserUpdateResponse;
 import am.itspace.bookshop.entity.User;
 import org.springframework.http.ResponseEntity;
 
@@ -14,4 +15,8 @@ public interface UserService {
     Optional<User> findByEmail(String username);
 
     User save(SaveUserRequest saveUserRequest);
+
+    ResponseEntity<UserUpdateResponse> update(SaveUserRequest saveUserRequest, int id);
+
+    void delete(int id);
 }

@@ -46,4 +46,20 @@ public class BookEndpoint {
         List<BookResponseDto> bookResponseDto = bookService.getByAuthorId(id);
         return ResponseEntity.ok(bookResponseDto);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateBook(@PathVariable int id, @RequestBody SaveBookRequest saveBookRequest) {
+        log.info("updateBook: {}", saveBookRequest);
+        if (saveBookRequest == null) {
+            return ResponseEntity.badRequest().body(null);
+        }
+        return bookService.update(saveBookRequest, id);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteBook(@PathVariable int id) {
+        log.info("delete Book: {}", id);
+        bookService.delete(id);
+        return ResponseEntity.ok().build();
+    }
 }

@@ -26,6 +26,7 @@ public class AuthorEndpoint {
 
     @GetMapping("/{id}")
     public ResponseEntity<AuthorResponseDto> getAuthorById(@PathVariable int id) {
+        log.info("Get Author id: {}", id);
         AuthorResponseDto authorResponseDto = authorService.getById(id);
         log.info("author: {}", authorResponseDto);
         return ResponseEntity.ok(authorResponseDto);
@@ -33,10 +34,26 @@ public class AuthorEndpoint {
 
     @PostMapping
     public ResponseEntity<?> add(@RequestBody SaveAuthorRequest saveAuthorRequest) {
-        log.info("saveAuthorRequest: {}", saveAuthorRequest);
+        log.info("add saveAuthorRequest: {}", saveAuthorRequest);
         if (saveAuthorRequest == null) {
             return ResponseEntity.badRequest().body(null);
         }
          return authorService.save(saveAuthorRequest);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@RequestBody SaveAuthorRequest saveAuthorRequest, @PathVariable int id) {
+        log.info("update saveAuthorRequest: {}", saveAuthorRequest);
+        if (saveAuthorRequest == null) {
+            return ResponseEntity.badRequest().body(null);
+        }
+        return authorService.update(saveAuthorRequest, id);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable int id) {
+        log.info("Delete Author id: {}", id);
+        authorService.delete(id);
+        return ResponseEntity.ok().build();
     }
 }
