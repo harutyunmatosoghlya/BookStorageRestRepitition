@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: book-shop-rest
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1
+    username: sa
+    password: sa
+    driver-class-name: org.h2.Driver
+
+jwt:
+  secret: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyIiwiaWF0IjoxNzQ3NDkxMDQ2LCJleHAiOjE3NDgwOTEwNDZ9.0mhDW_gBsj4mLL9eACgb0z9bvIFJo6JDRIjdFAgGLXnQgpoY8Et2Yk02mE-Bacpau3dNI8P4R8K9t1CpTiRhXA
+  expiration: 600000
+
+logging:
+  level:
+    root: INFO
+  file:
+    name: logs/application.log

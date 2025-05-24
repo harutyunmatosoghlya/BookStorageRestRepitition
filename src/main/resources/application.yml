@@ -5,6 +5,9 @@ spring:
     url: jdbc:mysql://localhost:3306/author_book?createDatabaseIfNotExist=true
     username: ${DB_USERNAME:root}
     password: ${DB_PASSWORD:root}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  liquibase:
+    change-log: classpath:/db/changelog.xml
 jwt:
   secret: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyIiwiaWF0IjoxNzQ3NDkxMDQ2LCJleHAiOjE3NDgwOTEwNDZ9.0mhDW_gBsj4mLL9eACgb0z9bvIFJo6JDRIjdFAgGLXnQgpoY8Et2Yk02mE-Bacpau3dNI8P4R8K9t1CpTiRhXA
   expiration: 600000
