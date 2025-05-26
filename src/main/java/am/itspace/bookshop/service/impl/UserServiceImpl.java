@@ -56,6 +56,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public User save(SaveUserRequest saveUserRequest) {
         User user = userMapper.toEntity(saveUserRequest);
+        if (user.getPassword() == null) {
+            throw new IllegalArgumentException("Password cannot be null");
+        }
         if (userRepository.findByEmail(user.getEmail()).isEmpty()) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }

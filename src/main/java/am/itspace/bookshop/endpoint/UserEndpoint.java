@@ -8,6 +8,7 @@ import am.itspace.bookshop.entity.User;
 import am.itspace.bookshop.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +34,7 @@ public class UserEndpoint {
         if (saveUserRequest == null) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(userService.save(saveUserRequest));
+        return new ResponseEntity<>(userService.save(saveUserRequest), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

@@ -64,11 +64,11 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     private Author updateAuthorFields(Author author, SaveAuthorRequest saveAuthorRequest) {
-        author.setName(valueUpdateUtil.getOrDefault(saveAuthorRequest.getName(), author.getName()));
-        author.setSurname(valueUpdateUtil.getOrDefault(saveAuthorRequest.getSurname(), author.getSurname()));
-        author.setPhone(valueUpdateUtil.getOrDefault(saveAuthorRequest.getPhone(), author.getPhone()));
-        author.setDateOfBirthday(valueUpdateUtil.getOrDefault(saveAuthorRequest.getDateOfBirthday(), author.getDateOfBirthday()));
-        author.setGender(valueUpdateUtil.getOrDefault(saveAuthorRequest.getGender(), author.getGender()));
+        author.setName(valueUpdateUtil.getOrDefault(author.getName(), saveAuthorRequest.getName()));
+        author.setSurname(valueUpdateUtil.getOrDefault(author.getSurname(), saveAuthorRequest.getSurname()));
+        author.setPhone(valueUpdateUtil.getOrDefault(author.getPhone(), saveAuthorRequest.getPhone()));
+        author.setDateOfBirthday(valueUpdateUtil.getOrDefault(author.getDateOfBirthday(), saveAuthorRequest.getDateOfBirthday()));
+        author.setGender(valueUpdateUtil.getOrDefault(author.getGender(), saveAuthorRequest.getGender()));
         return author;
     }
 }
