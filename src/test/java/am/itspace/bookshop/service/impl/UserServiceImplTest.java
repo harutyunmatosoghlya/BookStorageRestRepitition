@@ -6,11 +6,13 @@ import am.itspace.bookshop.dto.UserAuthResponse;
 import am.itspace.bookshop.dto.UserUpdateResponse;
 import am.itspace.bookshop.entity.User;
 import am.itspace.bookshop.entity.UserType;
+import am.itspace.bookshop.exaption.EmailAlreadyExistException;
+import am.itspace.bookshop.exaption.IncorrectPasswordException;
+import am.itspace.bookshop.exaption.UserNotFoundException;
 import am.itspace.bookshop.mapper.UserMapper;
 import am.itspace.bookshop.repository.UserRepository;
 import am.itspace.bookshop.util.JwtTokenUtil;
 import am.itspace.bookshop.util.ValueUpdateUtil;
-import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -96,7 +98,7 @@ class UserServiceImplTest {
     void savePasswordIsNull() {
         SaveUserRequest request = new SaveUserRequest("John", "Doe", "john@mail.com", null, UserType.USER);
         when(userMapper.toEntity(request)).thenReturn(User.builder().password(null).build());
-        assertThrows(IllegalArgumentException.class, () -> userService.save(request));
+        assertThrows(IncorrectPasswordException.class, () -> userService.save(request));
         verify(userRepository, never()).save(any());
     }
 
@@ -105,7 +107,7 @@ class UserServiceImplTest {
         SaveUserRequest request = new SaveUserRequest("John", "Doe", "duplicate@mail.com", "pass", UserType.USER);
         when(userMapper.toEntity(request)).thenReturn(User.builder().email("duplicate@mail.com").password("pass").build());
         when(userRepository.findByEmail("duplicate@mail.com")).thenReturn(Optional.of(new User()));
-        assertThrows(IllegalArgumentException.class, () -> userService.save(request));
+        assertThrows(EmailAlreadyExistException.class, () -> userService.save(request));
         verify(userRepository, never()).save(any());
     }
 
@@ -153,7 +155,7 @@ class UserServiceImplTest {
     void deleteUserNotFound() {
         int userId = 999;
         when(userRepository.existsById(userId)).thenReturn(false);
-        assertThrows(EntityNotFoundException.class, () -> userService.delete(userId));
+        assertThrows(UserNotFoundException.class, () -> userService.delete(userId));
         verify(userRepository, never()).deleteById(anyInt());
     }
 

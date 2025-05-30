@@ -4,11 +4,11 @@ import am.itspace.bookshop.dto.BookResponseDto;
 import am.itspace.bookshop.dto.SaveBookRequest;
 import am.itspace.bookshop.entity.Author;
 import am.itspace.bookshop.entity.Book;
+import am.itspace.bookshop.exaption.BookNotFoundException;
 import am.itspace.bookshop.mapper.BookMapper;
 import am.itspace.bookshop.repository.AuthorRepository;
 import am.itspace.bookshop.repository.BookRepository;
 import am.itspace.bookshop.util.ValueUpdateUtil;
-import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -132,7 +132,7 @@ class BookServiceImplTest {
     @Test
     void testDeleteNotFound() {
         when(bookRepository.existsById(1)).thenReturn(false);
-        EntityNotFoundException thrown = assertThrows(EntityNotFoundException.class, () -> bookService.delete(1));
+        BookNotFoundException thrown = assertThrows(BookNotFoundException.class, () -> bookService.delete(1));
         assertThat(thrown.getMessage()).contains("Book with id 1 not found");
     }
 

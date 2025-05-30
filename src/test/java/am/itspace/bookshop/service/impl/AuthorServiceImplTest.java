@@ -4,10 +4,10 @@ import am.itspace.bookshop.dto.AuthorResponseDto;
 import am.itspace.bookshop.dto.SaveAuthorRequest;
 import am.itspace.bookshop.entity.Author;
 import am.itspace.bookshop.entity.Gender;
+import am.itspace.bookshop.exaption.AuthorNotFoundException;
 import am.itspace.bookshop.mapper.AuthorMapper;
 import am.itspace.bookshop.repository.AuthorRepository;
 import am.itspace.bookshop.util.ValueUpdateUtil;
-import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -126,7 +126,7 @@ class AuthorServiceImplTest {
     @Test
     void testDeleteNotFound() {
         when(authorRepository.existsById(1)).thenReturn(false);
-        EntityNotFoundException thrown = assertThrows(EntityNotFoundException.class,
+        AuthorNotFoundException thrown = assertThrows(AuthorNotFoundException.class,
                 () -> authorService.delete(1));
         assertThat(thrown.getMessage()).contains("Author with id 1 not found");
     }

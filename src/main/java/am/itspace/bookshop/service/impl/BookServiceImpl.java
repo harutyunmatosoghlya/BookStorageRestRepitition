@@ -4,12 +4,12 @@ import am.itspace.bookshop.dto.BookResponseDto;
 import am.itspace.bookshop.dto.SaveBookRequest;
 import am.itspace.bookshop.entity.Author;
 import am.itspace.bookshop.entity.Book;
+import am.itspace.bookshop.exaption.BookNotFoundException;
 import am.itspace.bookshop.mapper.BookMapper;
 import am.itspace.bookshop.repository.AuthorRepository;
 import am.itspace.bookshop.repository.BookRepository;
 import am.itspace.bookshop.service.BookService;
 import am.itspace.bookshop.util.ValueUpdateUtil;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,7 +70,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public void delete(int id) {
         if (!bookRepository.existsById(id)) {
-            throw new EntityNotFoundException("Book with id " + id + " not found");
+            throw new BookNotFoundException("Book with id " + id + " not found");
         }
         bookRepository.deleteById(id);
     }
@@ -80,7 +80,7 @@ public class BookServiceImpl implements BookService {
         book.setPrice(valueUpdateUtil.getOrDefault(book.getPrice(), saveBookRequest.getPrice()));
         book.setQty(valueUpdateUtil.getOrDefault(book.getQty(), saveBookRequest.getQty()));
         Author author = authorRepository.findById(saveBookRequest.getAuthorId())
-                .orElseThrow(() -> new EntityNotFoundException("Author with id " + saveBookRequest.getAuthorId() + " not found"));
+                .orElseThrow(() -> new BookNotFoundException("Author with id " + saveBookRequest.getAuthorId() + " not found"));
         book.setAuthor(author);
         return book;
     }

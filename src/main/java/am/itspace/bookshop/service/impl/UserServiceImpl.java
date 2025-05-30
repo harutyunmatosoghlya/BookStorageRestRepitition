@@ -5,12 +5,14 @@ import am.itspace.bookshop.dto.UserAuthRequest;
 import am.itspace.bookshop.dto.UserAuthResponse;
 import am.itspace.bookshop.dto.UserUpdateResponse;
 import am.itspace.bookshop.entity.User;
+import am.itspace.bookshop.exaption.EmailAlreadyExistException;
+import am.itspace.bookshop.exaption.IncorrectPasswordException;
+import am.itspace.bookshop.exaption.UserNotFoundException;
 import am.itspace.bookshop.mapper.UserMapper;
 import am.itspace.bookshop.repository.UserRepository;
 import am.itspace.bookshop.service.UserService;
 import am.itspace.bookshop.util.JwtTokenUtil;
 import am.itspace.bookshop.util.ValueUpdateUtil;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,10 +59,10 @@ public class UserServiceImpl implements UserService {
     public User save(SaveUserRequest saveUserRequest) {
         User user = userMapper.toEntity(saveUserRequest);
         if (user.getPassword() == null) {
-            throw new IllegalArgumentException("Password cannot be null");
+            throw new IncorrectPasswordException("Password cannot be null");
         }
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("User already exists");
+            throw new EmailAlreadyExistException("User already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
@@ -79,7 +81,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(int id) {
         if (!userRepository.existsById(id)) {
-            throw new EntityNotFoundException("User with id " + id + " not found");
+            throw new UserNotFoundException("User with id " + id + " not found");
         }
         userRepository.deleteById(id);
     }

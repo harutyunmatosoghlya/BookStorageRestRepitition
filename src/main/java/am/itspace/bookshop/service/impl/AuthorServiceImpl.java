@@ -3,11 +3,11 @@ package am.itspace.bookshop.service.impl;
 import am.itspace.bookshop.dto.AuthorResponseDto;
 import am.itspace.bookshop.dto.SaveAuthorRequest;
 import am.itspace.bookshop.entity.Author;
+import am.itspace.bookshop.exaption.AuthorNotFoundException;
 import am.itspace.bookshop.mapper.AuthorMapper;
 import am.itspace.bookshop.repository.AuthorRepository;
 import am.itspace.bookshop.service.AuthorService;
 import am.itspace.bookshop.util.ValueUpdateUtil;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -58,7 +58,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public void delete(int id) {
         if (!authorRepository.existsById(id)) {
-            throw new EntityNotFoundException("Author with id " + id + " not found");
+            throw new AuthorNotFoundException("Author with id " + id + " not found");
         }
         authorRepository.deleteById(id);
     }
