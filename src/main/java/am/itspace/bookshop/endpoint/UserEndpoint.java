@@ -20,7 +20,7 @@ public class UserEndpoint {
     private final UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<UserAuthResponse> login(@RequestBody UserAuthRequest userAuthRequest) {
+    public ResponseEntity<UserAuthResponse> login(@RequestBody(required = false) UserAuthRequest userAuthRequest) {
         log.info("Login request: {}", userAuthRequest);
         if (userAuthRequest == null) {
             return ResponseEntity.badRequest().build();
@@ -29,7 +29,7 @@ public class UserEndpoint {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody SaveUserRequest saveUserRequest) {
+    public ResponseEntity<User> register(@RequestBody(required = false) SaveUserRequest saveUserRequest) {
         log.info("Register request: {}", saveUserRequest);
         if (saveUserRequest == null) {
             return ResponseEntity.badRequest().build();
@@ -38,7 +38,7 @@ public class UserEndpoint {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserUpdateResponse> update(@PathVariable int id, @RequestBody SaveUserRequest saveUserRequest) {
+    public ResponseEntity<UserUpdateResponse> update(@PathVariable int id, @RequestBody(required = false) SaveUserRequest saveUserRequest) {
         log.info("Update request: {}", saveUserRequest);
         if (saveUserRequest == null) {
             return ResponseEntity.badRequest().build();

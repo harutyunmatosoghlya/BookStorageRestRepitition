@@ -102,10 +102,12 @@ class BookServiceImplTest {
         SaveBookRequest request = SaveBookRequest.builder().title("New").price(10).qty(2).authorId(1).build();
         Book updated = Book.builder().title("New").price(10).qty(2).build();
         BookResponseDto dto = new BookResponseDto();
+        Author author = new Author();
         when(bookRepository.findById(1)).thenReturn(Optional.of(oldBook));
         when(valueUpdateUtil.getOrDefault("Old", "New")).thenReturn("New");
         when(valueUpdateUtil.getOrDefault(5.0, 10.0)).thenReturn(10.0);
         when(valueUpdateUtil.getOrDefault(1, 2)).thenReturn(2);
+        when(authorRepository.findById(1)).thenReturn(Optional.of(author)); // 🔥 важно!
         when(bookRepository.save(oldBook)).thenReturn(updated);
         when(bookMapper.toDto(updated)).thenReturn(dto);
         ResponseEntity<BookResponseDto> result = bookService.update(request, 1);
@@ -114,9 +116,9 @@ class BookServiceImplTest {
     }
 
     @Test
-    void testUpdateNotFound() {
+    void testUpdateNull() {
         when(bookRepository.findById(1)).thenReturn(Optional.empty());
-        ResponseEntity<BookResponseDto> result = bookService.update(new SaveBookRequest(), 1);
+        ResponseEntity<BookResponseDto> result = bookService.update(null, 1);
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 

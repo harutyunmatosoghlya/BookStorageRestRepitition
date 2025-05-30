@@ -79,11 +79,9 @@ public class BookServiceImpl implements BookService {
         book.setTitle(valueUpdateUtil.getOrDefault(book.getTitle(), saveBookRequest.getTitle()));
         book.setPrice(valueUpdateUtil.getOrDefault(book.getPrice(), saveBookRequest.getPrice()));
         book.setQty(valueUpdateUtil.getOrDefault(book.getQty(), saveBookRequest.getQty()));
-        if (book.getAuthor() == null && authorRepository.findById(saveBookRequest.getAuthorId()).isPresent()) {
-            Author author = authorRepository.findById(saveBookRequest.getAuthorId())
-                    .orElseThrow(() -> new EntityNotFoundException("Author with id " + saveBookRequest.getAuthorId() + " not found"));
-            book.setAuthor(author);
-        }
+        Author author = authorRepository.findById(saveBookRequest.getAuthorId())
+                .orElseThrow(() -> new EntityNotFoundException("Author with id " + saveBookRequest.getAuthorId() + " not found"));
+        book.setAuthor(author);
         return book;
     }
 }

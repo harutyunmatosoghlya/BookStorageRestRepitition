@@ -33,7 +33,7 @@ public class AuthorEndpoint {
     }
 
     @PostMapping
-    public ResponseEntity<?> add(@RequestBody SaveAuthorRequest saveAuthorRequest) {
+    public ResponseEntity<?> add(@RequestBody(required = false) SaveAuthorRequest saveAuthorRequest) {
         log.info("add saveAuthorRequest: {}", saveAuthorRequest);
         if (saveAuthorRequest == null) {
             return ResponseEntity.badRequest().body(null);
@@ -42,7 +42,7 @@ public class AuthorEndpoint {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@RequestBody SaveAuthorRequest saveAuthorRequest, @PathVariable int id) {
+    public ResponseEntity<?> update(@RequestBody(required = false) SaveAuthorRequest saveAuthorRequest, @PathVariable int id) {
         log.info("update saveAuthorRequest: {}", saveAuthorRequest);
         if (saveAuthorRequest == null) {
             return ResponseEntity.badRequest().body(null);

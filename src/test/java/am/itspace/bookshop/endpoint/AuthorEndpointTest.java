@@ -114,6 +114,15 @@ class AuthorEndpointTest {
     }
 
     @Test
+    void addNull() throws Exception {
+        mockMvc.perform(post("/author")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(""))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void update() throws Exception {
         mockMvc.perform(put("/author/{id}", 3)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -122,6 +131,15 @@ class AuthorEndpointTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("authorJSON"))
                 .andExpect(jsonPath("$.surname").value("author"));
+    }
+
+    @Test
+    void updateNull() throws Exception {
+        mockMvc.perform(put("/author/{id}", 3)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(""))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
 
     @Test

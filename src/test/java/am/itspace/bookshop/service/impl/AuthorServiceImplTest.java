@@ -99,7 +99,7 @@ class AuthorServiceImplTest {
         Author updated = Author.builder().id(1).name("new").build();
         AuthorResponseDto dto = AuthorResponseDto.builder().id(1).name("new").build();
         when(authorRepository.findById(1)).thenReturn(Optional.of(existing));
-        when(valueUpdateUtil.getOrDefault("new", "old")).thenReturn("new");
+        when(valueUpdateUtil.getOrDefault("old", "new")).thenReturn("new");
         when(authorRepository.save(any())).thenReturn(updated);
         when(authorMapper.toDto(updated)).thenReturn(dto);
         ResponseEntity<AuthorResponseDto> result = authorService.update(request, 1);

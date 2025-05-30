@@ -111,6 +111,15 @@ public class BookEndpointTest {
     }
 
     @Test
+    void addNull() throws Exception {
+        mockMvc.perform(post("/books")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(""))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void getBookById() throws Exception {
         mockMvc.perform(get("/books/{id}", 1))
                 .andDo(print())
@@ -141,6 +150,15 @@ public class BookEndpointTest {
                 .andExpect(jsonPath("$.title").value("book2"))
                 .andExpect(jsonPath("$.price").value(50))
                 .andExpect(jsonPath("$.author.name").value("author"));
+    }
+
+    @Test
+    void updateBookNull() throws Exception {
+        mockMvc.perform(put("/books/{id}", 2)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(""))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
 
     @Test

@@ -104,6 +104,16 @@ public class UserEndpointTest {
     }
 
     @Test
+    void loginNull() throws Exception {
+        mockMvc.perform(post("/user/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(""))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
     void register() throws Exception {
         mockMvc.perform(post("/user/register")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -111,6 +121,15 @@ public class UserEndpointTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value("adminJSON"));
+    }
+
+    @Test
+    void registerNull() throws Exception {
+        mockMvc.perform(post("/user/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(""))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -122,6 +141,15 @@ public class UserEndpointTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("adminJSON"))
                 .andExpect(jsonPath("$.email").value("user@gmail.com"));
+    }
+
+    @Test
+    void updateNull() throws Exception {
+        mockMvc.perform(put("/user/{id}", userUpdateId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(""))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
 
     @Test

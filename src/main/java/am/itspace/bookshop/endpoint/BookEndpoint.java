@@ -25,7 +25,7 @@ public class BookEndpoint {
     }
 
     @PostMapping
-    public ResponseEntity<?> add(@RequestBody SaveBookRequest saveBookRequest) {
+    public ResponseEntity<?> add(@RequestBody(required = false) SaveBookRequest saveBookRequest) {
         log.info("saveBookRequest: {}", saveBookRequest);
         if (saveBookRequest == null) {
             return ResponseEntity.badRequest().body(null);
@@ -48,7 +48,7 @@ public class BookEndpoint {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateBook(@PathVariable int id, @RequestBody SaveBookRequest saveBookRequest) {
+    public ResponseEntity<?> updateBook(@PathVariable int id, @RequestBody(required = false) SaveBookRequest saveBookRequest) {
         log.info("updateBook: {}", saveBookRequest);
         if (saveBookRequest == null) {
             return ResponseEntity.badRequest().body(null);

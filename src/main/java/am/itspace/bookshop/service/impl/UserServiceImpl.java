@@ -59,9 +59,10 @@ public class UserServiceImpl implements UserService {
         if (user.getPassword() == null) {
             throw new IllegalArgumentException("Password cannot be null");
         }
-        if (userRepository.findByEmail(user.getEmail()).isEmpty()) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("User already exists");
         }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
