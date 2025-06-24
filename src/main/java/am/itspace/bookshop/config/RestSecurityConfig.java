@@ -11,12 +11,31 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.cors.CorsConfiguration;
 
 @Configuration
 @RequiredArgsConstructor
 public class RestSecurityConfig {
     private final JwtAuthenticationEntryPoint authenticationEntryPoint;
     private final JWTAuthenticationTokenFilter jwtAuthenticationTokenFilter;
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("http://localhost:55242");
+        configuration.addAllowedMethod("GET");
+        configuration.addAllowedMethod("POST");
+        configuration.addAllowedMethod("PUT");
+        configuration.addAllowedMethod("DELETE");
+        configuration.addAllowedMethod("OPTIONS");
+        configuration.addAllowedHeader("*");
+        configuration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -30,7 +49,8 @@ public class RestSecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/user/login", "/user/register").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/authors/**").authenticated()
+                        .requestMatchers("/authors/**").authenticated()
+                        .requestMatchers("/books/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)

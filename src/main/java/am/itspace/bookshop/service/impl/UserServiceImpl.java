@@ -5,6 +5,7 @@ import am.itspace.bookshop.dto.UserAuthRequest;
 import am.itspace.bookshop.dto.UserAuthResponse;
 import am.itspace.bookshop.dto.UserUpdateResponse;
 import am.itspace.bookshop.entity.User;
+import am.itspace.bookshop.entity.UserType;
 import am.itspace.bookshop.exaption.EmailAlreadyExistException;
 import am.itspace.bookshop.exaption.IncorrectPasswordException;
 import am.itspace.bookshop.exaption.UserNotFoundException;
@@ -65,6 +66,7 @@ public class UserServiceImpl implements UserService {
             throw new EmailAlreadyExistException("User already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setUserType(UserType.USER);
         return userRepository.save(user);
     }
 

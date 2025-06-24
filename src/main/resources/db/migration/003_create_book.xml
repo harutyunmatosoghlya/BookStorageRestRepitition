@@ -29,6 +29,7 @@
                 baseColumnNames="author_id"
                 referencedTableName="author"
                 referencedColumnNames="id"
-                constraintName="fk_book_author"/>
+                constraintName="fk_book_author"
+                onDelete="CASCADE"/>
     </changeSet>
 </databaseChangeLog>

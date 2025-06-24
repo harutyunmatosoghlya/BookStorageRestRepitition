@@ -91,7 +91,6 @@
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-processor</artifactId>
             <version>1.5.3.Final</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>
